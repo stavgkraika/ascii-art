@@ -27,7 +27,7 @@
         .btn-secondary:hover { background: #30363d; }
         .demo-section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
         .demo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
-        .demo-input input, .demo-input select { width: 100%; padding: 12px; border: 1px solid #30363d; border-radius: 6px; background: #0d1117; color: #f0f6fc; font-size: 1rem; margin-bottom: 0.5rem; }
+        .demo-input input, .demo-input select, .demo-input textarea { width: 100%; padding: 12px; border: 1px solid #30363d; border-radius: 6px; background: #0d1117; color: #f0f6fc; font-size: 1rem; margin-bottom: 0.5rem; font-family: inherit; }
         .demo-output { background: #0d1117; color: #58a6ff; padding: 1rem; border-radius: 6px; font-family: 'SF Mono', Monaco, monospace; font-size: 0.8rem; overflow-x: auto; white-space: pre; border: 1px solid #30363d; min-height: 200px; }
         .error { color: #f85149; }
         @media (max-width: 768px) { .demo-container { grid-template-columns: 1fr; } }
@@ -49,7 +49,7 @@
             <h2>🎯 Live Demo</h2>
             <div class="demo-container">
                 <div class="demo-input">
-                    <input type="text" id="textInput" placeholder="Enter text here..." value="Hello!">
+                    <textarea id="textInput" placeholder="Enter text here... (Press Enter for new line)" rows="4" style="resize: vertical;">Hello!</textarea>
                     <select id="bannerSelect">
                         <option value="standard">Standard</option>
                         <option value="shadow">Shadow</option>
@@ -83,7 +83,7 @@
 
     <script>
         async function generateArt() {
-            const text = document.getElementById('textInput').value;
+            let text = document.getElementById('textInput').value;
             const banner = document.getElementById('bannerSelect').value;
             const color = document.getElementById('colorSelect').value;
             const align = document.getElementById('alignSelect').value;
@@ -95,6 +95,9 @@
                 output.className = 'demo-output error';
                 return;
             }
+
+            // Convert actual newlines to \n for the API
+            text = text.replace(/\n/g, '\\n');
 
             output.textContent = 'Loading...';
             output.className = 'demo-output';
